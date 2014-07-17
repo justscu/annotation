@@ -1,0 +1,4 @@
+./configure --prefix=/home/ll/commlib/src/NGINX-ZMQ/bin/nginx-1.4.4 --add-module=/home/ll/commlib/src/NGINX-ZMQ/src/nginx-push-stream-module-master/ --with-openssl=/home/ll/commlib/src/openssl-1.0.1c/
+
+./configure --prefix=/home/ll/project/commlib/NGINX-ZMQ/bin/nginx-1.4.4 --add-module=/home/ll/project/commlib/NGINX-ZMQ/src/nginx-push-stream-module-master --with-http_ssl_module   --with-openssl=/home/ll/project/commlib/src/openssl-1.0.1c
+
