@@ -1,6 +1,11 @@
 ============= annotation ================
-===   add annotation for source code  ===
+===== dd annotation for source code =====
 =========================================
 
 1. nginx-1.4.4
+  　　　　ngx_pool_t，分为大内存和小内存。（１）当分配大块内存时，直接分配，最后有释放函数。（２）当分配小块内存时，是直接分配，没有释放函数的。 这样做的原因，刚好符合http这种处理。当http来时，构造一个pool对象；当关闭http时，销毁pool对象。所以无需释放小块内存。
+　　　　ngx_slab_t，这种，是有分配与释放内存的动作的。适合频繁的分配和释放内存的操作。
+
 2. nginx-push-stream-module-master
+
+
