@@ -13,7 +13,7 @@
 static ngx_int_t ngx_http_static_handler(ngx_http_request_t *r);
 static ngx_int_t ngx_http_static_init(ngx_conf_t *cf);
 
-
+// 处理客户端 请求静态页面
 ngx_http_module_t  ngx_http_static_module_ctx = {
     NULL,                                  /* preconfiguration */
     ngx_http_static_init,                  /* postconfiguration */

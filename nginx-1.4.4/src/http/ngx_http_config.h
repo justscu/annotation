@@ -41,10 +41,10 @@ typedef struct {
 #define NGX_HTTP_MAIN_CONF        0x02000000
 #define NGX_HTTP_SRV_CONF         0x04000000
 #define NGX_HTTP_LOC_CONF         0x08000000
-#define NGX_HTTP_UPS_CONF         0x10000000
-#define NGX_HTTP_SIF_CONF         0x20000000
-#define NGX_HTTP_LIF_CONF         0x40000000
-#define NGX_HTTP_LMT_CONF         0x80000000
+#define NGX_HTTP_UPS_CONF         0x10000000 // upstream
+#define NGX_HTTP_SIF_CONF         0x20000000 // server if ЦёБо
+#define NGX_HTTP_LIF_CONF         0x40000000 // local if ЦёБо
+#define NGX_HTTP_LMT_CONF         0x80000000 // limit_except
 
 
 #define NGX_HTTP_MAIN_CONF_OFFSET  offsetof(ngx_http_conf_ctx_t, main_conf)

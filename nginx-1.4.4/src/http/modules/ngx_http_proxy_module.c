@@ -516,7 +516,7 @@ static ngx_command_t  ngx_http_proxy_commands[] = {
       ngx_null_command
 };
 
-
+// upstream, 反向代理模块
 static ngx_http_module_t  ngx_http_proxy_module_ctx = {
     ngx_http_proxy_add_variables,          /* preconfiguration */
     NULL,                                  /* postconfiguration */

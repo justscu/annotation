@@ -107,23 +107,23 @@ typedef struct {
 
 
 typedef enum {
-    NGX_HTTP_POST_READ_PHASE = 0,
+    NGX_HTTP_POST_READ_PHASE = 0, //读完　请求的头部后
 
-    NGX_HTTP_SERVER_REWRITE_PHASE,
+    NGX_HTTP_SERVER_REWRITE_PHASE, // server内请求地址　rewrite
 
     NGX_HTTP_FIND_CONFIG_PHASE,
-    NGX_HTTP_REWRITE_PHASE,
-    NGX_HTTP_POST_REWRITE_PHASE,
+    NGX_HTTP_REWRITE_PHASE, // Location 内请求地址　 rewrite
+    NGX_HTTP_POST_REWRITE_PHASE, // 请求地址rewrie完成之后
 
-    NGX_HTTP_PREACCESS_PHASE,
+    NGX_HTTP_PREACCESS_PHASE, // 权限 1/3
 
-    NGX_HTTP_ACCESS_PHASE,
-    NGX_HTTP_POST_ACCESS_PHASE,
+    NGX_HTTP_ACCESS_PHASE, // 权限 2/3
+    NGX_HTTP_POST_ACCESS_PHASE, // 权限 3/3
 
-    NGX_HTTP_TRY_FILES_PHASE,
-    NGX_HTTP_CONTENT_PHASE,
+    NGX_HTTP_TRY_FILES_PHASE, // 配置项　try_files 处理阶段
+    NGX_HTTP_CONTENT_PHASE, // 内容生成阶段
 
-    NGX_HTTP_LOG_PHASE
+    NGX_HTTP_LOG_PHASE // log 处理
 } ngx_http_phases;
 
 typedef struct ngx_http_phase_handler_s  ngx_http_phase_handler_t;

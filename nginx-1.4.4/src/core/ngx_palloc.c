@@ -8,11 +8,14 @@
 #include <ngx_config.h>
 #include <ngx_core.h>
 
+// 内存池：　本内存池，只有对大块内存的释放，没有对小块内存进行释放。
+// 但这并不是问题，像http这种, 请求到来时，建立一个pool, 当关闭http时，pool的对象就被释放掉
+// 若既有分配，又有释放，可以采用slab
 
 static void *ngx_palloc_block(ngx_pool_t *pool, size_t size);
 static void *ngx_palloc_large(ngx_pool_t *pool, size_t size);
 
-
+// 构造一个内存池
 ngx_pool_t *
 ngx_create_pool(size_t size, ngx_log_t *log)
 {
@@ -112,13 +115,13 @@ ngx_reset_pool(ngx_pool_t *pool)
     }
 }
 
-// pool alloc，从pool中分配内存
+// pool alloc，从pool中分配内存[内存对齐]
 void *
 ngx_palloc(ngx_pool_t *pool, size_t size)
 {
     u_char      *m;
     ngx_pool_t  *p;
-
+    // 小于最大长度，从池中分配
     if (size <= pool->max) {
 
         p = pool->current;
@@ -138,11 +141,11 @@ ngx_palloc(ngx_pool_t *pool, size_t size)
 
         return ngx_palloc_block(pool, size);
     }
-
+    // 大于，
     return ngx_palloc_large(pool, size);
 }
 
-
+// 从pool中分配内存[内存不对齐]
 void *
 ngx_pnalloc(ngx_pool_t *pool, size_t size)
 {
@@ -173,13 +176,12 @@ ngx_pnalloc(ngx_pool_t *pool, size_t size)
 }
 
 
-static void *
-ngx_palloc_block(ngx_pool_t *pool, size_t size)
+static void * ngx_palloc_block(ngx_pool_t *pool, size_t size)
 {
     u_char      *m;
     size_t       psize;
     ngx_pool_t  *p, *new, *current;
-
+    // 分配一块跟原来一样大小的
     psize = (size_t) (pool->d.end - (u_char *) pool);
 
     m = ngx_memalign(NGX_POOL_ALIGNMENT, psize, pool->log);
@@ -212,9 +214,8 @@ ngx_palloc_block(ngx_pool_t *pool, size_t size)
     return m;
 }
 
-
-static void *
-ngx_palloc_large(ngx_pool_t *pool, size_t size)
+// 分配大块内存
+static void * ngx_palloc_large(ngx_pool_t *pool, size_t size)
 {
     void              *p;
     ngx_uint_t         n;
@@ -237,7 +238,7 @@ ngx_palloc_large(ngx_pool_t *pool, size_t size)
             break;
         }
     }
-
+    // 可能遇到分配不出大块内存的问题 TODO　?
     large = ngx_palloc(pool, sizeof(ngx_pool_large_t));
     if (large == NULL) {
         ngx_free(p);
@@ -276,7 +277,7 @@ ngx_pmemalign(ngx_pool_t *pool, size_t size, size_t alignment)
     return p;
 }
 
-
+// 释放大块内存
 ngx_int_t
 ngx_pfree(ngx_pool_t *pool, void *p)
 {
@@ -296,7 +297,7 @@ ngx_pfree(ngx_pool_t *pool, void *p)
     return NGX_DECLINED;
 }
 
-
+// 分配并且将内存置０
 void *
 ngx_pcalloc(ngx_pool_t *pool, size_t size)
 {

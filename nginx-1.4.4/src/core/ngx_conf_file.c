@@ -97,7 +97,7 @@ ngx_conf_param(ngx_conf_t *cf)
     return rv;
 }
 
-
+// 解析配置文件
 char *
 ngx_conf_parse(ngx_conf_t *cf, ngx_str_t *filename)
 {
@@ -422,7 +422,7 @@ invalid:
     return NGX_ERROR;
 }
 
-
+// ngx 中的每一行配置，是一个一个的token
 static ngx_int_t
 ngx_conf_read_token(ngx_conf_t *cf)
 {

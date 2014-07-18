@@ -11,7 +11,7 @@
 
 ngx_uint_t  ngx_pagesize;
 ngx_uint_t  ngx_pagesize_shift; // 12
-ngx_uint_t  ngx_cacheline_size;
+ngx_uint_t  ngx_cacheline_size; // cpu缓存对齐：64
 
 
 void *
@@ -30,7 +30,7 @@ ngx_alloc(size_t size, ngx_log_t *log)
     return p;
 }
 
-
+// 分配内存，并初始化０
 void *
 ngx_calloc(size_t size, ngx_log_t *log)
 {

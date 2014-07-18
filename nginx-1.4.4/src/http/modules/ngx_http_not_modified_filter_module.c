@@ -4,7 +4,8 @@
  * Copyright (C) Nginx, Inc.
  */
 
-// 本cpp解析　ｈｔｔｐ头部的　If-Modified-Since　字段
+// 本cpp解析 http 头部的　If-Modified-Since　字段，若两次请求的数据响应没有发生变化，
+// 就返回 304 Not Modified. 让客户端使用本地缓存，服务器直接删掉准备发送的数据
 #include <ngx_config.h>
 #include <ngx_core.h>
 #include <ngx_http.h>

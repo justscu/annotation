@@ -20,8 +20,8 @@
  */
 
 #define NGX_CONF_NOARGS      0x00000001
-#define NGX_CONF_TAKE1       0x00000002
-#define NGX_CONF_TAKE2       0x00000004
+#define NGX_CONF_TAKE1       0x00000002  // 后面有1个 token, eg: daemon on;
+#define NGX_CONF_TAKE2       0x00000004  // 后面有2个 token, eg: error_log  logs/error.log  info;
 #define NGX_CONF_TAKE3       0x00000008
 #define NGX_CONF_TAKE4       0x00000010
 #define NGX_CONF_TAKE5       0x00000020
@@ -40,8 +40,8 @@
                               |NGX_CONF_TAKE4)
 
 #define NGX_CONF_ARGS_NUMBER 0x000000ff
-#define NGX_CONF_BLOCK       0x00000100
-#define NGX_CONF_FLAG        0x00000200
+#define NGX_CONF_BLOCK       0x00000100 // 后面有个 {}
+#define NGX_CONF_FLAG        0x00000200 //　后面有　bool 型字段
 #define NGX_CONF_ANY         0x00000400
 #define NGX_CONF_1MORE       0x00000800
 #define NGX_CONF_2MORE       0x00001000
@@ -77,7 +77,7 @@
 
 struct ngx_command_s {
     ngx_str_t             name;
-    ngx_uint_t            type;
+    ngx_uint_t            type;// 指令类型　http/ core/ event ...
     char               *(*set)(ngx_conf_t *cf, ngx_command_t *cmd, void *conf);
     ngx_uint_t            conf;
     ngx_uint_t            offset;

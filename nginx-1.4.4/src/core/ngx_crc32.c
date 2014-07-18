@@ -101,7 +101,7 @@ uint32_t  ngx_crc32_table256[] = {
 
 uint32_t *ngx_crc32_table_short = ngx_crc32_table16;
 
-
+// crc32表，内存对齐
 ngx_int_t ngx_crc32_table_init(void)
 {
     void  *p;
@@ -112,7 +112,7 @@ ngx_int_t ngx_crc32_table_init(void)
     {
         return NGX_OK;
     }
-
+    // 若表不是对齐的，就重新对齐
     p = ngx_alloc(16 * sizeof(uint32_t) + ngx_cacheline_size, ngx_cycle->log);
     if (p == NULL) {
         return NGX_ERROR;

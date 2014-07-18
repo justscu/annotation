@@ -341,7 +341,7 @@ ngx_int_t ngx_hash_init(ngx_hash_init_t *hinit, ngx_hash_key_t *names, ngx_uint_
 
 	return NGX_ERROR;
 
-	found:
+found:
 
 	for (i = 0; i < size; i++)
 	{
