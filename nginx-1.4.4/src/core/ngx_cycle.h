@@ -85,7 +85,7 @@ typedef struct {
 
      int                      priority;
 
-     ngx_uint_t               cpu_affinity_n;
+     ngx_uint_t               cpu_affinity_n; // CPUÇ×ÔµÐÔ
      uint64_t                *cpu_affinity;
 
      char                    *username;

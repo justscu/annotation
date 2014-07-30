@@ -990,8 +990,8 @@ ngx_core_module_init_conf(ngx_cycle_t *cycle, void *conf)
 {
     ngx_core_conf_t  *ccf = conf;
 
-    ngx_conf_init_value(ccf->daemon, 1);
-    ngx_conf_init_value(ccf->master, 1);
+    ngx_conf_init_value(ccf->daemon, 0);
+    ngx_conf_init_value(ccf->master, 0);
     ngx_conf_init_msec_value(ccf->timer_resolution, 0);
 
     ngx_conf_init_value(ccf->worker_processes, 1);

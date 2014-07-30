@@ -360,7 +360,7 @@ ngx_event_accept(ngx_event_t *ev)
             ev->available--;
         }
 
-    } while (ev->available);
+    } while (ev->available); //available == 1Ê±£¬Ò»Ö±¶Á
 }
 
 

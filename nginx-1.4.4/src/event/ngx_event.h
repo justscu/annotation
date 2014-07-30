@@ -469,7 +469,7 @@ typedef struct {
     ngx_uint_t    connections;
     ngx_uint_t    use;
 
-    ngx_flag_t    multi_accept;
+    ngx_flag_t    multi_accept; //=1，同一个线程，可以同时接收多个客户端连接请求
     ngx_flag_t    accept_mutex;
 
     ngx_msec_t    accept_mutex_delay;

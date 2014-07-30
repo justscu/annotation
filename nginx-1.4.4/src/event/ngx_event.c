@@ -102,36 +102,36 @@ static ngx_str_t event_core_name = ngx_string("event_core");
 static ngx_command_t ngx_event_core_commands[] =
 {
 
-{ ngx_string("worker_connections"),
-NGX_EVENT_CONF | NGX_CONF_TAKE1, ngx_event_connections, 0, 0,
-NULL },
+	{ ngx_string("worker_connections"),
+	NGX_EVENT_CONF | NGX_CONF_TAKE1, ngx_event_connections, 0, 0,
+	NULL },
 
-{ ngx_string("connections"),
-NGX_EVENT_CONF | NGX_CONF_TAKE1, ngx_event_connections, 0, 0,
-NULL },
+	{ ngx_string("connections"),
+	NGX_EVENT_CONF | NGX_CONF_TAKE1, ngx_event_connections, 0, 0,
+	NULL },
 
-{ ngx_string("use"),
-NGX_EVENT_CONF | NGX_CONF_TAKE1, ngx_event_use, 0, 0,
-NULL },
+	{ ngx_string("use"),
+	NGX_EVENT_CONF | NGX_CONF_TAKE1, ngx_event_use, 0, 0,
+	NULL },
 
-{ ngx_string("multi_accept"),
-NGX_EVENT_CONF | NGX_CONF_FLAG, ngx_conf_set_flag_slot, 0, offsetof(
-		ngx_event_conf_t, multi_accept),
-NULL },
+	{ ngx_string("multi_accept"),
+	NGX_EVENT_CONF | NGX_CONF_FLAG, ngx_conf_set_flag_slot, 0, offsetof(
+			ngx_event_conf_t, multi_accept),
+	NULL },
 
-{ ngx_string("accept_mutex"),
-NGX_EVENT_CONF | NGX_CONF_FLAG, ngx_conf_set_flag_slot, 0, offsetof(
-		ngx_event_conf_t, accept_mutex),
-NULL },
+	{ ngx_string("accept_mutex"),
+	NGX_EVENT_CONF | NGX_CONF_FLAG, ngx_conf_set_flag_slot, 0, offsetof(
+			ngx_event_conf_t, accept_mutex),
+	NULL },
 
-{ ngx_string("accept_mutex_delay"),
-NGX_EVENT_CONF | NGX_CONF_TAKE1, ngx_conf_set_msec_slot, 0, offsetof(
-		ngx_event_conf_t, accept_mutex_delay),
-NULL },
+	{ ngx_string("accept_mutex_delay"),
+	NGX_EVENT_CONF | NGX_CONF_TAKE1, ngx_conf_set_msec_slot, 0, offsetof(
+			ngx_event_conf_t, accept_mutex_delay),
+	NULL },
 
-{ ngx_string("debug_connection"),
-NGX_EVENT_CONF | NGX_CONF_TAKE1, ngx_event_debug_connection, 0, 0,
-NULL },
+	{ ngx_string("debug_connection"),
+	NGX_EVENT_CONF | NGX_CONF_TAKE1, ngx_event_debug_connection, 0, 0,
+	NULL },
 
 ngx_null_command };
 
