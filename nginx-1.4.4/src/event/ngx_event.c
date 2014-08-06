@@ -31,7 +31,7 @@ static void *ngx_event_core_create_conf(ngx_cycle_t *cycle);
 static char *ngx_event_core_init_conf(ngx_cycle_t *cycle, void *conf);
 
 static ngx_uint_t ngx_timer_resolution;
-sig_atomic_t ngx_event_timer_alarm;
+sig_atomic_t ngx_event_timer_alarm; // =1时，定时被触发
 
 static ngx_uint_t ngx_event_max_module;
 
@@ -671,7 +671,7 @@ static ngx_int_t ngx_event_process_init(ngx_cycle_t *cycle)
 		itv.it_interval.tv_usec = (ngx_timer_resolution % 1000) * 1000;
 		itv.it_value.tv_sec = ngx_timer_resolution / 1000;
 		itv.it_value.tv_usec = (ngx_timer_resolution % 1000) * 1000;
-
+		// 设置定时器
 		if (setitimer(ITIMER_REAL, &itv, NULL) == -1)
 		{
 			ngx_log_error(NGX_LOG_ALERT, cycle->log, ngx_errno,

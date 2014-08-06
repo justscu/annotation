@@ -30,7 +30,7 @@ ngx_nonblocking(ngx_socket_t s)
 
     nb = 1;
 
-    return ioctl(s, FIONBIO, &nb);
+    return ioctl(s, FIONBIO, &nb); // µÈ¼ÛÓÚ fcntl(socket, F_SETFL, fcntl(s, F_GETFL) | O_NONBLOCK);
 }
 
 

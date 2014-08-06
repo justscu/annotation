@@ -16,13 +16,14 @@
 namespace leveldb
 {
 
+// data: 要hash的字符串， n为data的长度
 uint32_t Hash(const char* data, size_t n, uint32_t seed)
 {
 	// Similar to murmur hash
 	const uint32_t m = 0xc6a4a793;
 	const uint32_t r = 24;
 	const char* limit = data + n;
-	uint32_t h = seed ^ (n * m);
+	uint32_t h = seed ^ (n * m); // 按位异或
 
 	// Pick up four bytes at a time
 	while (data + 4 <= limit)
@@ -31,7 +32,7 @@ uint32_t Hash(const char* data, size_t n, uint32_t seed)
 		data += 4;
 		h += w;
 		h *= m;
-		h ^= (h >> 16);
+		h ^= (h >> 16); //高16bit不变
 	}
 
 	// Pick up remaining bytes

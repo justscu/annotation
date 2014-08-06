@@ -364,7 +364,7 @@ ngx_start_worker_processes(ngx_cycle_t *cycle, ngx_int_t n, ngx_int_t type)
 
         ch.pid = ngx_processes[ngx_process_slot].pid;
         ch.slot = ngx_process_slot;
-        ch.fd = ngx_processes[ngx_process_slot].channel[0];
+        ch.fd = ngx_processes[ngx_process_slot].channel[0]; //read
 
         ngx_pass_open_channel(cycle, &ch);
     }
@@ -424,7 +424,7 @@ ngx_start_cache_manager_processes(ngx_cycle_t *cycle, ngx_uint_t respawn)
     ngx_pass_open_channel(cycle, &ch);
 }
 
-
+// 告诉其他子进程，有新的子进程生成了
 static void
 ngx_pass_open_channel(ngx_cycle_t *cycle, ngx_channel_t *ch)
 {
@@ -1071,7 +1071,7 @@ ngx_worker_process_exit(ngx_cycle_t *cycle)
     exit(0);
 }
 
-
+// 当通过socket pair发消息时，本函数被调用
 static void
 ngx_channel_handler(ngx_event_t *ev)
 {
@@ -1131,17 +1131,17 @@ ngx_channel_handler(ngx_event_t *ev)
             ngx_reopen = 1;
             break;
 
-        case NGX_CMD_OPEN_CHANNEL:
+        case NGX_CMD_OPEN_CHANNEL: // 有新的进程启动
 
             ngx_log_debug3(NGX_LOG_DEBUG_CORE, ev->log, 0,
                            "get channel s:%i pid:%P fd:%d",
                            ch.slot, ch.pid, ch.fd);
 
             ngx_processes[ch.slot].pid = ch.pid;
-            ngx_processes[ch.slot].channel[0] = ch.fd;
+            ngx_processes[ch.slot].channel[0] = ch.fd; // fd
             break;
 
-        case NGX_CMD_CLOSE_CHANNEL:
+        case NGX_CMD_CLOSE_CHANNEL: // 有进程关闭
 
             ngx_log_debug4(NGX_LOG_DEBUG_CORE, ev->log, 0,
                            "close channel s:%i pid:%P our:%P fd:%d",

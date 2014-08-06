@@ -35,10 +35,10 @@ class BytewiseComparatorImpl: public Comparator //比较
 			return a.compare(b);
 		}
 
-		virtual void FindShortestSeparator(std::string* start,
+		virtual void FindShortestSeparator(/*out*/std::string* start,
 				const Slice& limit) const
 		{
-			// Find length of common prefix
+			// Find length of common prefix 找到共同前缀的长度
 			size_t min_length = std::min(start->size(), limit.size());
 			size_t diff_index = 0;
 			while ((diff_index < min_length) && ((*start)[diff_index]
@@ -47,7 +47,7 @@ class BytewiseComparatorImpl: public Comparator //比较
 				diff_index++;
 			}
 
-			if ( diff_index >= min_length )
+			if ( diff_index >= min_length ) //一个是另一个的前缀
 			{
 				// Do not shorten if one string is a prefix of the other
 			}

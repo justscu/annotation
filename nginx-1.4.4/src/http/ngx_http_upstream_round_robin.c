@@ -9,6 +9,15 @@
 #include <ngx_core.h>
 #include <ngx_http.h>
 
+/*
+ upstream tomcats {
+ server 10.1.1.107:88  max_fails=3 fail_timeout=3s weight=9;
+ server 10.1.1.132:80  max_fails=3 fail_timeout=3s weight=9;
+ }
+
+ proxy_pass   http://127.0.0.1;
+
+ * */
 
 static ngx_http_upstream_rr_peer_t *ngx_http_upstream_get_peer(
     ngx_http_upstream_rr_peer_data_t *rrp);
@@ -123,7 +132,7 @@ ngx_http_upstream_init_round_robin(ngx_conf_t *cf,
         backup->name = &us->host;
 
         n = 0;
-
+        // backup server
         for (i = 0; i < us->servers->nelts; i++) {
             for (j = 0; j < server[i].naddrs; j++) {
                 if (!server[i].backup) {
@@ -205,7 +214,8 @@ ngx_http_upstream_init_round_robin(ngx_conf_t *cf,
     return NGX_OK;
 }
 
-
+// 根据request，选择一个 peer
+// 先进行初始化操作
 ngx_int_t
 ngx_http_upstream_init_round_robin_peer(ngx_http_request_t *r,
     ngx_http_upstream_srv_conf_t *us)
@@ -232,8 +242,9 @@ ngx_http_upstream_init_round_robin_peer(ngx_http_request_t *r,
     if (rrp->peers->next && rrp->peers->next->number > n) {
         n = rrp->peers->next->number;
     }
-
+    // 如果n小于一个指针变量所能表示的范围
     if (n <= 8 * sizeof(uintptr_t)) {
+    	//直接使用已有的指针类型的data变量做位图（tried是位图，用来标识在一轮选择中，各个后端服务器是否已经被选择过）
         rrp->tried = &rrp->data;
         rrp->data = 0;
 
@@ -245,7 +256,7 @@ ngx_http_upstream_init_round_robin_peer(ngx_http_request_t *r,
             return NGX_ERROR;
         }
     }
-
+    //回调函数设置
     r->upstream->peer.get = ngx_http_upstream_get_round_robin_peer;
     r->upstream->peer.free = ngx_http_upstream_free_round_robin_peer;
     r->upstream->peer.tries = rrp->peers->number;
@@ -365,7 +376,7 @@ ngx_http_upstream_create_round_robin_peer(ngx_http_request_t *r,
     return NGX_OK;
 }
 
-
+// 选择一台合适的后端服务器
 ngx_int_t
 ngx_http_upstream_get_round_robin_peer(ngx_peer_connection_t *pc, void *data)
 {
@@ -383,7 +394,7 @@ ngx_http_upstream_get_round_robin_peer(ngx_peer_connection_t *pc, void *data)
 
     pc->cached = 0;
     pc->connection = NULL;
-
+    // 只有一台机器
     if (rrp->peers->single) {
         peer = &rrp->peers->peer[0];
 
@@ -460,7 +471,7 @@ failed:
     return NGX_BUSY;
 }
 
-
+// 从peer中，选取一台
 static ngx_http_upstream_rr_peer_t *
 ngx_http_upstream_get_peer(ngx_http_upstream_rr_peer_data_t *rrp)
 {
@@ -485,13 +496,13 @@ ngx_http_upstream_get_peer(ngx_http_upstream_rr_peer_data_t *rrp)
         }
 
         peer = &rrp->peers->peer[i];
-
+        // down 掉了
         if (peer->down) {
             continue;
         }
 
         if (peer->max_fails
-            && peer->fails >= peer->max_fails
+            && peer->fails >= peer->max_fails // 失败次数过多
             && now - peer->checked <= peer->fail_timeout)
         {
             continue;
@@ -552,7 +563,7 @@ ngx_http_upstream_free_round_robin_peer(ngx_peer_connection_t *pc, void *data,
     }
 
     peer = &rrp->peers->peer[rrp->current];
-
+    // 失败了
     if (state & NGX_PEER_FAILED) {
         now = ngx_time();
 

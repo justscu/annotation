@@ -85,14 +85,14 @@ typedef struct {
 
 
 typedef struct {
-    ngx_addr_t                      *addrs;
-    ngx_uint_t                       naddrs;
-    ngx_uint_t                       weight;
+    ngx_addr_t                      *addrs; // addr地址
+    ngx_uint_t                       naddrs; // addr的个数
+    ngx_uint_t                       weight; //权重
     ngx_uint_t                       max_fails;
     time_t                           fail_timeout;
 
-    unsigned                         down:1;
-    unsigned                         backup:1;
+    unsigned                         down:1; // 是否down掉了 ?
+    unsigned                         backup:1; // 只有当现有的服务器都失败后，才会启动backup的服务器
 } ngx_http_upstream_server_t;
 
 

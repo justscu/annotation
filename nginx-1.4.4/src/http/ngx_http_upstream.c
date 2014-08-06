@@ -4607,6 +4607,15 @@ ngx_int_t ngx_http_upstream_cache_status(ngx_http_request_t *r, ngx_http_variabl
 
 #endif
 
+// 解析配置文件中的 upstream
+/*
+upstream backend_name{
+    server xx.xx.xx.xx:xx weight=2 max_fails=3;
+    server www.xxx.com weight=1;
+    server unix://xxx/xxx;
+    #...
+}
+*/
 static char *
 ngx_http_upstream(ngx_conf_t *cf, ngx_command_t *cmd, void *dummy)
 {
@@ -4718,7 +4727,7 @@ ngx_http_upstream(ngx_conf_t *cf, ngx_command_t *cmd, void *dummy)
 
 	return rv;
 }
-
+// 解析含有 "server" 的配置行: server xx.xx.xx.xx:xx weight=2 max_fails=3;
 static char *
 ngx_http_upstream_server(ngx_conf_t *cf, ngx_command_t *cmd, void *conf)
 {
@@ -4771,7 +4780,7 @@ ngx_http_upstream_server(ngx_conf_t *cf, ngx_command_t *cmd, void *conf)
 
 	for (i = 2; i < cf->args->nelts; i++)
 	{
-
+		// weight=
 		if (ngx_strncmp(value[i].data, "weight=", 7) == 0)
 		{
 
@@ -4789,7 +4798,7 @@ ngx_http_upstream_server(ngx_conf_t *cf, ngx_command_t *cmd, void *conf)
 
 			continue;
 		}
-
+		// max_fails=
 		if (ngx_strncmp(value[i].data, "max_fails=", 10) == 0)
 		{
 
@@ -4807,7 +4816,7 @@ ngx_http_upstream_server(ngx_conf_t *cf, ngx_command_t *cmd, void *conf)
 
 			continue;
 		}
-
+		// fail_timeout=
 		if (ngx_strncmp(value[i].data, "fail_timeout=", 13) == 0)
 		{
 
@@ -4828,7 +4837,7 @@ ngx_http_upstream_server(ngx_conf_t *cf, ngx_command_t *cmd, void *conf)
 
 			continue;
 		}
-
+		// backup
 		if (ngx_strncmp(value[i].data, "backup", 6) == 0)
 		{
 
@@ -4841,7 +4850,7 @@ ngx_http_upstream_server(ngx_conf_t *cf, ngx_command_t *cmd, void *conf)
 
 			continue;
 		}
-
+		// down
 		if (ngx_strncmp(value[i].data, "down", 4) == 0)
 		{
 
@@ -5324,7 +5333,7 @@ ngx_http_upstream_init_main_conf(ngx_conf_t *cf, void *conf)
 
 	for (i = 0; i < umcf->upstreams.nelts; i++)
 	{
-
+		// 选择负载均衡的方式
 		init = uscfp[i]->peer.init_upstream ? uscfp[i]->peer.init_upstream : ngx_http_upstream_init_round_robin;
 
 		if (init(cf, uscfp[i]) != NGX_OK)

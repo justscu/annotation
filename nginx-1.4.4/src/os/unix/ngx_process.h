@@ -20,7 +20,7 @@ typedef pid_t       ngx_pid_t;
 typedef void (*ngx_spawn_proc_pt) (ngx_cycle_t *cycle, void *data);
 
 typedef struct {
-    ngx_pid_t           pid;
+    ngx_pid_t           pid; //×Ó½ø³ÌID
     int                 status;
     ngx_socket_t        channel[2];
 

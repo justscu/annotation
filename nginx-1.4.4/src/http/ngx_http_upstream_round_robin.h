@@ -19,18 +19,18 @@ typedef struct {
     socklen_t                       socklen;
     ngx_str_t                       name;
 
-    ngx_int_t                       current_weight;
+    ngx_int_t                       current_weight; //当前权重
     ngx_int_t                       effective_weight;
-    ngx_int_t                       weight;
+    ngx_int_t                       weight; // 设置的权重
 
-    ngx_uint_t                      fails;
-    time_t                          accessed;
+    ngx_uint_t                      fails; // 失败次数
+    time_t                          accessed; // 访问时间
     time_t                          checked;
 
-    ngx_uint_t                      max_fails;
+    ngx_uint_t                      max_fails; // 最大失败次数
     time_t                          fail_timeout;
 
-    ngx_uint_t                      down;          /* unsigned  down:1; */
+    ngx_uint_t                      down;          /* unsigned  down:1; */ // 服务器是否参与策略
 
 #if (NGX_HTTP_SSL)
     ngx_ssl_session_t              *ssl_session;   /* local to a process */
@@ -38,7 +38,7 @@ typedef struct {
 } ngx_http_upstream_rr_peer_t;
 
 
-typedef struct ngx_http_upstream_rr_peers_s  ngx_http_upstream_rr_peers_t;
+typedef struct ngx_http_upstream_rr_peers_s  ngx_http_upstream_rr_peers_t; // round robin
 
 struct ngx_http_upstream_rr_peers_s {
     ngx_uint_t                      number;
@@ -61,7 +61,7 @@ struct ngx_http_upstream_rr_peers_s {
 typedef struct {
     ngx_http_upstream_rr_peers_t   *peers;
     ngx_uint_t                      current;
-    uintptr_t                      *tried;
+    uintptr_t                      *tried; // tried是位图，用来标识在一轮选择中，各个后端服务器是否已经被选择过
     uintptr_t                       data;
 } ngx_http_upstream_rr_peer_data_t;
 

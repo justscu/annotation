@@ -70,7 +70,7 @@ ngx_pid_t ngx_spawn_process(ngx_cycle_t *cycle, ngx_spawn_proc_pt proc, void *da
 
 	}
 	else
-	{
+	{	//找到一个没有使用的
 		for (s = 0; s < ngx_last_process; s++)
 		{
 			if (ngx_processes[s].pid == -1)
@@ -123,14 +123,14 @@ ngx_pid_t ngx_spawn_process(ngx_cycle_t *cycle, ngx_spawn_proc_pt proc, void *da
 			ngx_close_channel(ngx_processes[s].channel, cycle->log);
 			return NGX_INVALID_PID;
 		}
-
+		// 设置接收SIGIO/SIGURG信号的进程ID或进程组ID
 		if (fcntl(ngx_processes[s].channel[0], F_SETOWN, ngx_pid) == -1)
 		{
 			ngx_log_error(NGX_LOG_ALERT, cycle->log, ngx_errno, "fcntl(F_SETOWN) failed while spawning \"%s\"", name);
 			ngx_close_channel(ngx_processes[s].channel, cycle->log);
 			return NGX_INVALID_PID;
 		}
-
+		// FD_CLOEXEC，表示调用exec()类的函数时，该fd自动被关闭
 		if (fcntl(ngx_processes[s].channel[0], F_SETFD, FD_CLOEXEC) == -1)
 		{
 			ngx_log_error(NGX_LOG_ALERT, cycle->log, ngx_errno, "fcntl(FD_CLOEXEC) failed while spawning \"%s\"", name);
@@ -177,7 +177,7 @@ ngx_pid_t ngx_spawn_process(ngx_cycle_t *cycle, ngx_spawn_proc_pt proc, void *da
 
 	ngx_log_error(NGX_LOG_NOTICE, cycle->log, 0, "start %s %P", name, pid);
 
-	ngx_processes[s].pid = pid;
+	ngx_processes[s].pid = pid; //子进程的ID
 	ngx_processes[s].exited = 0;
 
 	if (respawn >= 0)

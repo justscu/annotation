@@ -6,7 +6,8 @@
 #include <ngx_config.h>
 #include <ngx_core.h>
 #include <ngx_channel.h>
-//其实就是socket pair.
+//其实就是socket pair.将新进程的fd，传给其他进程
+// @ch，新进程的信息
 ngx_int_t ngx_write_channel(ngx_socket_t s, ngx_channel_t *ch, size_t size, ngx_log_t *log)
 {
 	ssize_t n;
@@ -46,7 +47,7 @@ ngx_int_t ngx_write_channel(ngx_socket_t s, ngx_channel_t *ch, size_t size, ngx_
 		 * Fortunately, gcc with -O1 compiles this ngx_memcpy()
 		 * in the same simple assignment as in the code above
 		 */
-
+		// 将新进程的FD，传给所有进程
 		ngx_memcpy(CMSG_DATA(&cmsg.cm), &ch->fd, sizeof(int));
 	}
 
@@ -153,7 +154,7 @@ ngx_int_t ngx_read_channel(ngx_socket_t s, ngx_channel_t *ch, size_t size, ngx_l
 	}
 
 #if (NGX_HAVE_MSGHDR_MSG_CONTROL)
-
+	// 有新的进程启动
 	if (ch->command == NGX_CMD_OPEN_CHANNEL)
 	{
 
@@ -172,7 +173,7 @@ ngx_int_t ngx_read_channel(ngx_socket_t s, ngx_channel_t *ch, size_t size, ngx_l
 
 		/* ch->fd = *(int *) CMSG_DATA(&cmsg.cm); */
 
-		ngx_memcpy(&ch->fd, CMSG_DATA(&cmsg.cm), sizeof(int));
+		ngx_memcpy(&ch->fd, CMSG_DATA(&cmsg.cm), sizeof(int)); // 新进程的fd，可以通过该fd，向新进程发送消息
 	}
 
 	if (msg.msg_flags & (MSG_TRUNC | MSG_CTRUNC))
@@ -198,7 +199,7 @@ ngx_int_t ngx_read_channel(ngx_socket_t s, ngx_channel_t *ch, size_t size, ngx_l
 
 	return n;
 }
-
+// 当有事件发生时，handler被调用
 ngx_int_t ngx_add_channel_event(ngx_cycle_t *cycle, ngx_fd_t fd, ngx_int_t event, ngx_event_handler_pt handler)
 {
 	ngx_event_t *ev, *rev, *wev;

@@ -32,7 +32,7 @@ class SCOPED_LOCKABLE MutexLock
 		~MutexLock() UNLOCK_FUNCTION()
 		{	this->mu_->Unlock();}
 
-		private:
+	private:
 		port::Mutex *const mu_;
 		// No copying allowed
 		MutexLock(const MutexLock&);
